@@ -1,10 +1,8 @@
 import { useState } from "react";
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-import "./App.scss";
+import { GoodList } from "./components/GoodList";
+import { Button } from "./components/Button";
 import products from "./products.json";
-import { GoodList } from "./components/GoodList/GoodList";
-import { Button } from "./components/Button/Button";
+import "./App.scss";
 
 const ID_BUTTON_NAME = "id";
 const NAME_BUTTON_NAME = "name";
@@ -38,6 +36,7 @@ function prepareGoods(goods, { sortButton, query, reversed }) {
   }
   return preparedGoods;
 }
+
 const App = () => {
   const [sortButton, setSortButton] = useState("");
   const [reversed, setReversed] = useState(false);
@@ -56,29 +55,33 @@ const App = () => {
   return (
     <div className="App">
       <h1>Goods</h1>
-      <div className="filters container">
-        <Button
-          onClick={() => {
-            setSortButton("");
-          }}
-          activity={sortButton === ""}
-        >
-          {RESET_BUTTON_NAME}
-        </Button>
-
-        {[ID_BUTTON_NAME, NAME_BUTTON_NAME, COLOR_BUTTON_NAME].map((button) => (
+      <div className="pannel container">
+        <div className="filters">
+          {[ID_BUTTON_NAME, NAME_BUTTON_NAME, COLOR_BUTTON_NAME].map(
+            (button) => (
+              <Button
+                key={button}
+                activity={button === sortButton}
+                onClick={() => {
+                  handleButtonClick(button);
+                }}
+              >
+                {button}
+              </Button>
+            )
+          )}
+        </div>
+        {sortButton !== "" && (
           <Button
-            key={button}
-            activity={button === sortButton}
             onClick={() => {
-              handleButtonClick(button);
+              setSortButton("");
             }}
+            activity={sortButton === ""}
           >
-            {button}
+            {RESET_BUTTON_NAME}
           </Button>
-        ))}
+        )}
       </div>
-
       <GoodList products={visibleProducts} />
     </div>
   );

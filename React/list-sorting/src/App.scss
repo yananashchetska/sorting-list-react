@@ -5,15 +5,17 @@
 
 body {
   display: flex;
-  // align-items: center;
-  // justify-content: center;
+}
+
+.pannel {
+  display: flex;
 }
 
 .filters {
   display: flex;
   gap: 40px;
+  margin-right: 64px;
 }
-
 
 .container {
   padding: 0 56px;
