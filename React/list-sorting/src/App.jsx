@@ -11,11 +11,11 @@ const NAME_BUTTON_NAME = "name";
 const COLOR_BUTTON_NAME = "color";
 const RESET_BUTTON_NAME = "reset";
 
-function prepareGoods(goods, { sortButton, query }) {
+function prepareGoods(goods, { sortButton, query, reversed }) {
   let preparedGoods = [...goods];
 
   if (query) {
-    preparedGoods = preparedGoods.filter(good => good.name.includes(query));
+    preparedGoods = preparedGoods.filter((good) => good.name.includes(query));
   }
 
   if (sortButton) {
@@ -23,7 +23,7 @@ function prepareGoods(goods, { sortButton, query }) {
       switch (sortButton) {
         case ID_BUTTON_NAME:
           return product1[sortButton] - product2[sortButton];
-        
+
         case NAME_BUTTON_NAME:
         case COLOR_BUTTON_NAME:
           return product1[sortButton].localeCompare(product2[sortButton]);
@@ -32,13 +32,26 @@ function prepareGoods(goods, { sortButton, query }) {
       }
     });
   }
-  
+
+  if (reversed) {
+    preparedGoods = preparedGoods.reverse();
+  }
   return preparedGoods;
 }
 const App = () => {
   const [sortButton, setSortButton] = useState("");
-  const visibleProducts = prepareGoods(products, {sortButton});
+  const [reversed, setReversed] = useState(false);
 
+  const handleButtonClick = (button) => {
+    if (sortButton === button) {
+      setReversed(!reversed);
+    } else {
+      setSortButton(button);
+      setReversed(false);
+    }
+  };
+
+  let visibleProducts = prepareGoods(products, { sortButton, reversed });
 
   return (
     <div className="App">
@@ -57,7 +70,9 @@ const App = () => {
           <Button
             key={button}
             activity={button === sortButton}
-            onClick={() => setSortButton(button)}
+            onClick={() => {
+              handleButtonClick(button);
+            }}
           >
             {button}
           </Button>
