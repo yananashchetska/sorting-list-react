@@ -1,13 +1,11 @@
 import { useState } from "react";
+
 import { GoodList } from "./components/GoodList";
-import { Button } from "./components/Button";
+import { Header } from "./components/Header";
+import { SORT_FIELD } from "./components/constants";
+
 import products from "./products.json";
 import "./App.scss";
-
-const ID_BUTTON_NAME = "id";
-const NAME_BUTTON_NAME = "name";
-const COLOR_BUTTON_NAME = "color";
-const RESET_BUTTON_NAME = "reset";
 
 function prepareGoods(goods, { sortButton, query, reversed }) {
   let preparedGoods = [...goods];
@@ -19,11 +17,11 @@ function prepareGoods(goods, { sortButton, query, reversed }) {
   if (sortButton) {
     preparedGoods.sort((product1, product2) => {
       switch (sortButton) {
-        case ID_BUTTON_NAME:
+        case SORT_FIELD.ID:
           return product1[sortButton] - product2[sortButton];
 
-        case NAME_BUTTON_NAME:
-        case COLOR_BUTTON_NAME:
+        case SORT_FIELD.NAME:
+        case SORT_FIELD.COLOR:
           return product1[sortButton].localeCompare(product2[sortButton]);
         default:
           return 0;
@@ -41,47 +39,29 @@ const App = () => {
   const [sortButton, setSortButton] = useState("");
   const [reversed, setReversed] = useState(false);
 
-  const handleButtonClick = (button) => {
-    if (sortButton === button) {
-      setReversed(!reversed);
-    } else {
-      setSortButton(button);
-      setReversed(false);
-    }
-  };
+  // const handleButtonClick = (button) => {
+  //   if (sortButton === button) {
+  //     setReversed(!reversed);
+  //   } else {
+  //     setSortButton(button);
+  //     setReversed(false);
+  //   }
+  // };
 
   let visibleProducts = prepareGoods(products, { sortButton, reversed });
 
   return (
     <div className="App">
-      <h1>Goods</h1>
-      <div className="pannel container">
-        <div className="filters">
-          {[ID_BUTTON_NAME, NAME_BUTTON_NAME, COLOR_BUTTON_NAME].map(
-            (button) => (
-              <Button
-                key={button}
-                activity={button === sortButton}
-                onClick={() => {
-                  handleButtonClick(button);
-                }}
-              >
-                {button}
-              </Button>
-            )
-          )}
-        </div>
-        {sortButton !== "" && (
-          <Button
-            onClick={() => {
-              setSortButton("");
-            }}
-            activity={sortButton === ""}
-          >
-            {RESET_BUTTON_NAME}
-          </Button>
-        )}
-      </div>
+      <Header
+        sortButton={sortButton}
+        sortBy={(field) => {
+          setSortButton(field);
+        }}
+        reversed={reversed}
+        setReversed={(field) => {
+          setReversed(field);
+        }}
+      />
       <GoodList products={visibleProducts} />
     </div>
   );

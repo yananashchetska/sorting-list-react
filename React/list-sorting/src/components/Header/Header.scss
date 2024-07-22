@@ -1,0 +1,46 @@
+.header {
+  display: flex;
+  background-color: #ffd0d0;
+  padding: 30px;
+
+  &__filters {
+    display: flex;
+    gap: 40px;
+    width: 100%;
+  }
+}
+
+.button {
+  font-size: 20px;
+  color: #000;
+  background-color: #ddd;
+  outline: none;
+  border: 2px solid white;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+
+.id {
+  color: rgb(163, 170, 110);
+  background-color: #fcffe3;
+}
+
+.name {
+  color: rgb(170, 110, 153);
+  background-color: #fce0ff;
+}
+
+.color{
+  color: rgb(110, 169, 170);
+  background-color: #e9f3fa;
+}
+
+.reset{
+  color: rgb(255, 229, 229);
+  background-color: #c65151;
+}
+
+.active {
+  background-color: #000000;
+}

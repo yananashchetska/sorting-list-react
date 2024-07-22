@@ -1,23 +1,14 @@
 *, *::after, *::before {
   margin: 0;
   padding: 0;
-}
-
-body {
-  display: flex;
-}
-
-.pannel {
-  display: flex;
-}
-
-.filters {
-  display: flex;
-  gap: 40px;
-  margin-right: 64px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .container {
-  padding: 0 56px;
+  padding: 0 25%;
   margin-top: 24px;
+}
+
+.App {
+  width: 100vw;
 }
