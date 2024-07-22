@@ -1,0 +1,12 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  background-color: #aec4ef;
+}
+
+.active {
+  background-color: #6f83ac;
+  color: #fff;
+}

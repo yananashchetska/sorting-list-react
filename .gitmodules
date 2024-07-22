@@ -1,0 +1,3 @@
+[submodule "list-via-js"]
+	path = list-via-js
+	url = https://github.com/yananashchetska/list-via-js.git
