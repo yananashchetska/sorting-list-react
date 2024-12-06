@@ -14,15 +14,24 @@ export const Form: React.FC<FormProps> = ({ addTodo }) => {
   const [hasTitleError, setHasTitleError] = useState(false);
   const [hasDescriptionError, setHasDescriptionError] = useState(false);
 
+  const validateForm = () => {
+    const titleError = !title.trim();
+    const descriptionError = !description.trim();
+    
+
+    setHasTitleError(titleError);
+    setHasDescriptionError(descriptionError);
+    
+    return !(titleError || descriptionError);
+  }
+
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    setHasTitleError(!hasTitleError);
-    setHasDescriptionError(!hasDescriptionError);
-
-    if (!title || !description) {
+    
+    if (!validateForm()) {
       return;
     }
+ 
 
     const newTodo: TodoItem = {
       id: Date.now(),
