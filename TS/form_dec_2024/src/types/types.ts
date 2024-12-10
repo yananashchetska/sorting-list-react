@@ -7,4 +7,8 @@ export type TodoItem = {
 
 export type TodoProps = {
   todos: TodoItem[];
-}
+};
+
+export type SearchBarItem = {
+  query: string;
+};

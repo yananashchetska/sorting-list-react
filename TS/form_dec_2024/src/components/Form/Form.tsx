@@ -1,43 +1,45 @@
 import React, { useState } from "react";
-import { TodoItem } from "../../types/types";
 import classnames from "classnames";
+import { TodoItem } from "../../types/types";
+import { FormProps } from "../../interfaces/FormProps";
+import './Form.css'
 
-interface FormProps {
-  addTodo: (todo: TodoItem) => void;
-}
+
 
 export const Form: React.FC<FormProps> = ({ addTodo }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [isCompleted, setIsComplited] = useState(false);
+  const initialState = {
+    title: "",
+    description: "",
+    isCompleted: false,
+    errors: { title: false, description: false },
+  };
 
-  const [hasTitleError, setHasTitleError] = useState(false);
-  const [hasDescriptionError, setHasDescriptionError] = useState(false);
+  const [state, setState] = useState(initialState);
 
   const validateForm = () => {
-    const titleError = !title.trim();
-    const descriptionError = !description.trim();
-    
+    const titleError = !state.title.trim();
+    const descriptionError = !state.description.trim();
 
-    setHasTitleError(titleError);
-    setHasDescriptionError(descriptionError);
-    
+    setState((prevState) => ({
+      ...prevState,
+      errors: { title: titleError, description: descriptionError },
+    }));
+
     return !(titleError || descriptionError);
-  }
+  };
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
- 
 
     const newTodo: TodoItem = {
       id: Date.now(),
-      title,
-      description,
-      isCompleted,
+      title: state.title,
+      description: state.description,
+      isCompleted: state.isCompleted,
     };
 
     addTodo(newTodo);
@@ -45,11 +47,7 @@ export const Form: React.FC<FormProps> = ({ addTodo }) => {
   };
 
   function reset() {
-    setTitle("");
-    setHasTitleError(false);
-    setHasDescriptionError(false);
-    setDescription("");
-    setIsComplited(false);
+    setState(initialState);
   }
 
   return (
@@ -64,17 +62,20 @@ export const Form: React.FC<FormProps> = ({ addTodo }) => {
         <input
           id="title-input"
           className={classnames("input", {
-            "is-danger": hasTitleError,
+            "is-danger": state.errors.title,
           })}
           type="text"
-          value={title}
+          value={state.title}
           onChange={(e) => {
-            setTitle(e.target.value);
-            setHasTitleError(false);
+            setState((prevState) => ({
+              ...prevState,
+              title: e.target.value,
+              errors: { ...state.errors, title: false },
+            }));
           }}
         />
-        {hasTitleError && (
-          <p style={{ color: "red" }}>You shoul enter a title</p>
+        {state.errors.title && (
+          <p style={{ color: "red" }}>You should enter a title</p>
         )}
       </div>
       <div className="input-control is-flex is-flex-direction-column">
@@ -82,36 +83,40 @@ export const Form: React.FC<FormProps> = ({ addTodo }) => {
         <textarea
           id="description-input"
           className={classnames("textarea", {
-            "is-danger": hasDescriptionError,
+            "is-danger": state.errors.description,
           })}
-          value={description}
+          value={state.description}
           onChange={(e) => {
-            setDescription(e.target.value)
-            setHasDescriptionError(false);
+            setState((prevState) => ({
+              ...prevState,
+              description: e.target.value,
+              errors: { ...state.errors, description: false },
+            }));
           }}
         />
 
-        {hasDescriptionError && (
-          <p style={{ color: "red" }}>You shoul enter a title</p>
+        {state.errors.description && (
+          <p style={{ color: "red" }}>You shoul enter a description</p>
         )}
       </div>
       <div className="input-control is-flex is-justify-content-space-between">
         <label htmlFor="status-input">Is completed? </label>
         <input
           id="status-input"
-          // className="checkbox"
           value=""
           type="checkbox"
-          onChange={() => setIsComplited(!isCompleted)}
+          onChange={() =>
+            setState((prevState) => ({
+              ...prevState,
+              isCompleted: !state.isCompleted,
+            }))
+          }
         />
       </div>
       <button type="submit" className="button is-link">
         Submit
       </button>
-      <button
-        type="reset"
-        className="button"
-      >
+      <button type="reset" className="button">
         Reset
       </button>
     </form>
